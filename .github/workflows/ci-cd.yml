@@ -52,7 +52,7 @@ jobs:
             
 
             APP_DIR="${{ secrets.APP_DIR }}"
-            cd "$APP_DIR"
+            cd clt-lms
 
             git fetch origin main
             git checkout main
