@@ -26,7 +26,7 @@ export const genrateTemplateHtml = (fullName: string, otpCode: string) => {
 
           <p style="font-size:16px; color:#333;">
             Best regards,<br>
-            <strong>The CLT Academy</strong>
+            <strong>The Fun Fin</strong>
           </p>
         </td>
       </tr>

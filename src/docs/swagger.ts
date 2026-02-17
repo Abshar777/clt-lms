@@ -4,10 +4,10 @@ export const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.3",
     info: {
-      title: "LMS Backend API",
+      title: "FUN FIN Backend API",
       version: "1.0.0",
       description:
-        "Developer-friendly auth API for LMS backend (Bun + TypeScript + Express).",
+        "Developer-friendly auth API for FUN FIN backend (Bun + TypeScript + Express).",
     },
     servers: [
       {
