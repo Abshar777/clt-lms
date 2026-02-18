@@ -1,16 +1,22 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { compareValue, hashValue } from "../utils/hash";
+import { compareValue, hashValue } from "../../../shared/utils/hash";
+
+export const AUTH_PROVIDER = {
+  LOCAL: "local",
+  GOOGLE: "google",
+  APPLE: "apple",
+} as const;
+
+export type AuthProvider = (typeof AUTH_PROVIDER)[keyof typeof AUTH_PROVIDER];
 
 export interface IUser extends Document {
   fullName: string;
   country: string;
   email: string;
   password: string;
+  authProvider: AuthProvider;
+  providerUserId?: string;
   isEmailVerified: boolean;
-  otpCode?: string;
-  otpExpiresAt?: Date;
-  resetPasswordCode?: string;
-  resetPasswordExpiresAt?: Date;
   comparePassword(password: string): Promise<boolean>;
 }
 
@@ -38,21 +44,19 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 6,
     },
+    authProvider: {
+      type: String,
+      enum: Object.values(AUTH_PROVIDER),
+      default: AUTH_PROVIDER.LOCAL,
+      required: true,
+    },
+    providerUserId: {
+      type: String,
+      trim: true,
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,
-    },
-    otpCode: {
-      type: String,
-    },
-    otpExpiresAt: {
-      type: Date,
-    },
-    resetPasswordCode: {
-      type: String,
-    },
-    resetPasswordExpiresAt: {
-      type: Date,
     },
   },
   { timestamps: true },

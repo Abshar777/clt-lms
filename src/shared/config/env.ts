@@ -12,7 +12,8 @@ const requireEnv = (key: string, fallback?: string): string => {
 
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
-  port: Number(process.env.PORT ?? 5001),
+  clientPort: Number(process.env.CLIENT_PORT ?? process.env.PORT ?? 5001),
+  adminPort: Number(process.env.ADMIN_PORT ?? 5002),
   mongoUri: requireEnv("MONGODB_URI"),
   jwtSecret: requireEnv("JWT_SECRET"),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? "7d",

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.controller";
 import { requireAuth } from "../middlewares/auth.middleware";
-import { validate } from "../middlewares/validate.middleware";
+import { validate } from "../../../shared/middlewares/validate.middleware";
 import { AuthService } from "../services/auth.service";
 import {
   forgotPasswordSchema,
@@ -9,6 +9,7 @@ import {
   resendOtpSchema,
   resetPasswordSchema,
   signupSchema,
+  socialLoginSchema,
   verifyOtpSchema,
 } from "../types/auth.types";
 
@@ -137,6 +138,51 @@ router.post("/resend-otp", validate(resendOtpSchema), authController.resendOtp);
  *         description: Login successful with JWT token
  */
 router.post("/login", validate(loginSchema), authController.login);
+
+/**
+ * @swagger
+ * /api/v1/auth/social-login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login or signup with Google/Apple
+ *     description: |
+ *       If user exists with same social provider, logs in.
+ *       If user does not exist, creates account and logs in.
+ *       If account is local email/password, social login is blocked for that email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [provider, providerUserId, email, fullName]
+ *             properties:
+ *               provider:
+ *                 type: string
+ *                 enum: [google, apple]
+ *                 example: google
+ *               providerUserId:
+ *                 type: string
+ *                 example: 117343434343434343434
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: john@example.com
+ *               fullName:
+ *                 type: string
+ *                 example: John Doe
+ *               country:
+ *                 type: string
+ *                 example: United States
+ *     responses:
+ *       200:
+ *         description: Social login successful
+ *       403:
+ *         description: Provider mismatch or restricted flow
+ *       409:
+ *         description: Email already belongs to local account
+ */
+router.post("/social-login", validate(socialLoginSchema), authController.socialLogin);
 
 /**
  * @swagger

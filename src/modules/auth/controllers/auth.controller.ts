@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { HTTP_STATUS } from "../constants/httpStatus";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { AuthService } from "../services/auth.service";
 import {
   ForgotPasswordInput,
@@ -7,6 +7,7 @@ import {
   ResendOtpInput,
   ResetPasswordInput,
   SignupInput,
+  SocialLoginInput,
   VerifyOtpInput,
 } from "../types/auth.types";
 
@@ -61,6 +62,19 @@ export class AuthController {
     }
   };
 
+  public socialLogin = async (
+    req: Request<{}, {}, SocialLoginInput>,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const result = await this.authService.socialLogin(req.body);
+      res.status(HTTP_STATUS.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public forgotPassword = async (
     req: Request<{}, {}, ForgotPasswordInput>,
     res: Response,
@@ -94,6 +108,7 @@ export class AuthController {
         fullName: req.user?.fullName,
         country: req.user?.country,
         email: req.user?.email,
+        authProvider: req.user?.authProvider,
         isEmailVerified: req.user?.isEmailVerified,
       },
     });

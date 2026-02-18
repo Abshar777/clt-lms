@@ -1,17 +1,23 @@
-import { app } from "./app";
-import { connectDB } from "./config/db";
-import { env } from "./config/env";
+import { app as clientApp } from "./apps/client/app";
+import { app as adminApp } from "./apps/admin/app";
+import { connectDB } from "./shared/config/db";
+import { env } from "./shared/config/env";
 
 const bootstrap = async (): Promise<void> => {
   try {
     await connectDB();
 
-    app.listen(env.port, () => {
-      console.log(`Server running on http://localhost:${env.port}`);
-      console.log(`Swagger docs on http://localhost:${env.port}/docs`);
+    clientApp.listen(env.clientPort, () => {
+      console.log(`Client API running on http://localhost:${env.clientPort}`);
+      console.log(`Client docs on http://localhost:${env.clientPort}/docs`);
+    });
+
+    adminApp.listen(env.adminPort, () => {
+      console.log(`Admin API running on http://localhost:${env.adminPort}`);
+      console.log(`Admin docs on http://localhost:${env.adminPort}/docs (alias: /admin/docs)`);
     });
   } catch (error) {
-    console.error("Failed to start server", error);
+    console.error("Failed to start servers", error);
     process.exit(1);
   }
 };

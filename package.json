@@ -5,9 +5,14 @@
   "type": "commonjs",
   "scripts": {
     "dev": "bun --watch src/server.ts",
+    "dev:client": "bun --watch src/apps/client/server.ts",
+    "dev:admin": "bun --watch src/apps/admin/server.ts",
     "start": "bun src/server.ts",
+    "start:client": "bun src/apps/client/server.ts",
+    "start:admin": "bun src/apps/admin/server.ts",
     "build": "tsc -p tsconfig.json",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "seed:admin": "bun src/scripts/initDefaultAdmin.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
