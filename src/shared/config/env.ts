@@ -23,4 +23,6 @@ export const env = {
   mailPass: requireEnv("MAIL_PASS"),
   mailFrom: process.env.MAIL_FROM ?? "CLT Academy <noreply@clt-academy.com>",
   otpExpMinutes: Number(process.env.OTP_EXP_MINUTES ?? 10),
+  clientBaseUrl: process.env.CLIENT_BASE_URL ?? "http://localhost:5001",
+  adminBaseUrl: process.env.ADMIN_BASE_URL ?? "http://localhost:5002",
 };

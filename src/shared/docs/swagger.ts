@@ -1,5 +1,6 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import path from "path";
+import { env } from "../config/env";
 
 const rootDir = process.cwd();
 const authRoutesGlob = path.join(rootDir, "src/modules/auth/routes/*.ts");
@@ -11,6 +12,10 @@ const baseDefinition = {
     {
       url: "http://localhost:5001",
       description: "Local dev server",
+    },
+    {
+      url: "https://api-fun-fin.clt-academy.com",
+      description: "Client API server",
     },
   ],
   components: {
@@ -42,13 +47,18 @@ export const userSwaggerSpec = swaggerJsdoc({
     servers: [
       {
         url: "http://localhost:5001",
+        description: "Local dev server",
+      },
+      {
+        url: "https://api-fun-fin.clt-academy.com",
         description: "Client API server",
       },
     ],
     info: {
       title: "LMS User Auth API",
       version: "1.0.0",
-      description: "User authentication, OTP verification, and password recovery APIs.",
+      description:
+        "User authentication, OTP verification, and password recovery APIs.",
     },
   },
   apis: [authRoutesGlob],
@@ -60,13 +70,18 @@ export const adminSwaggerSpec = swaggerJsdoc({
     servers: [
       {
         url: "http://localhost:5002",
+        description: "Local dev server",
+      },
+      {
+        url: "https://api-fun-fin.clt-academy.com",
         description: "Admin API server",
       },
     ],
     info: {
       title: "LMS Admin API",
       version: "1.0.0",
-      description: "Admin authentication and admin CRUD APIs (separate admin collection).",
+      description:
+        "Admin authentication and admin CRUD APIs (separate admin collection).",
     },
   },
   apis: [adminRoutesGlob],
