@@ -5,6 +5,8 @@ import { env } from "../config/env";
 const rootDir = process.cwd();
 const authRoutesGlob = path.join(rootDir, "src/modules/auth/routes/*.ts");
 const adminRoutesGlob = path.join(rootDir, "src/modules/admin/routes/*.ts");
+const courseClientRoutesGlob = path.join(rootDir, "src/modules/courses/client/routes/*.ts");
+const courseAdminRoutesGlob = path.join(rootDir, "src/modules/courses/admin/routes/*.ts");
 
 const baseDefinition = {
   openapi: "3.0.3",
@@ -61,7 +63,7 @@ export const userSwaggerSpec = swaggerJsdoc({
         "User authentication, OTP verification, and password recovery APIs.",
     },
   },
-  apis: [authRoutesGlob],
+  apis: [authRoutesGlob, courseClientRoutesGlob],
 });
 
 export const adminSwaggerSpec = swaggerJsdoc({
@@ -84,5 +86,5 @@ export const adminSwaggerSpec = swaggerJsdoc({
         "Admin authentication and admin CRUD APIs (separate admin collection).",
     },
   },
-  apis: [adminRoutesGlob],
+  apis: [adminRoutesGlob, courseAdminRoutesGlob],
 });

@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import authRoutes from "../../modules/auth/routes/auth.routes";
+import courseClientRoutes from "../../modules/courses/client/routes/course.client.routes";
 import { userSwaggerSpec } from "../../shared/docs/swagger";
 import { errorMiddleware } from "../../shared/middlewares/error.middleware";
 import { allowedOrigins } from "../../shared/constants/httpStatus";
@@ -50,5 +51,6 @@ app.get("/health", (_req, res) => {
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(userSwaggerSpec));
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1", courseClientRoutes);
 
 app.use(errorMiddleware);
