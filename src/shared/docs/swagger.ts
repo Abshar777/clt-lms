@@ -75,7 +75,7 @@ export const adminSwaggerSpec = swaggerJsdoc({
         description: "Local dev server",
       },
       {
-        url: "https://api-fun-fin.clt-academy.com",
+        url: "https://api-admin-fun-fin.clt-academy.com",
         description: "Admin API server",
       },
     ],
