@@ -5,6 +5,8 @@ export const AUTH_PROVIDER = {
   LOCAL: "local",
   GOOGLE: "google",
   APPLE: "apple",
+  FACEBOOK: "facebook",
+  MICROSOFT: "microsoft",
 } as const;
 
 export type AuthProvider = (typeof AUTH_PROVIDER)[keyof typeof AUTH_PROVIDER];

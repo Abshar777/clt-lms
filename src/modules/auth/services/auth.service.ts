@@ -209,7 +209,7 @@ export class AuthService {
   }
 
   public async socialLogin(input: {
-    provider: "google" | "apple";
+    provider: "google" | "apple" | "facebook" | "microsoft";
     providerUserId: string;
     email: string;
     fullName: string;

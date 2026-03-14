@@ -23,7 +23,7 @@ export const loginSchema = z.object({
 });
 
 export const socialLoginSchema = z.object({
-  provider: z.enum([AUTH_PROVIDER.GOOGLE, AUTH_PROVIDER.APPLE]),
+  provider: z.enum([AUTH_PROVIDER.GOOGLE, AUTH_PROVIDER.APPLE, AUTH_PROVIDER.FACEBOOK, AUTH_PROVIDER.MICROSOFT]),
   providerUserId: z.string().min(2, "providerUserId is required"),
   email: z.string().email("Valid email is required"),
   fullName: z.string().min(2, "fullName must be at least 2 characters"),
