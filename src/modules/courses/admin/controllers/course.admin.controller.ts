@@ -23,9 +23,11 @@ export class CourseAdminController {
     }
   };
 
-  public listCourses = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public listCourses = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await this.service.listCourses();
+      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) || 10;
+      const result = await this.service.listCourses(skip, limit);
       res.status(HTTP_STATUS.OK).json(result);
     } catch (error) {
       next(error);

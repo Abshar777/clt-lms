@@ -9,6 +9,7 @@ export interface ISyllabus extends Document {
   courseId: mongoose.Types.ObjectId;
   title: string;
   moduleLabel: string;
+  coverImage?: string;
   topics: ISyllabusTopicEntry[];
   createdAt: Date;
   updatedAt: Date;
@@ -27,6 +28,7 @@ const syllabusSchema = new Schema<ISyllabus>(
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     title: { type: String, required: true, trim: true },
     moduleLabel: { type: String, required: true, trim: true },
+    coverImage: { type: String, default: null },
     topics: { type: [syllabusTopicEntrySchema], default: [] },
   },
   { timestamps: true },

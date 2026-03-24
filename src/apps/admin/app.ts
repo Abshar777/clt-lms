@@ -7,6 +7,7 @@ import adminRoutes from "../../modules/admin/routes/admin.routes";
 import courseAdminRoutes from "../../modules/courses/admin/routes/course.admin.routes";
 import syllabusAdminRoutes from "../../modules/courses/admin/routes/syllabus.admin.routes";
 import topicAdminRoutes from "../../modules/courses/admin/routes/topic.admin.routes";
+import uploadRoutes from "../../modules/uploads/upload.routes";
 import { adminSwaggerSpec } from "../../shared/docs/swagger";
 import { errorMiddleware } from "../../shared/middlewares/error.middleware";
 import { allowedOrigins } from "../../shared/constants/httpStatus";
@@ -57,5 +58,6 @@ app.use("/api/v1", adminRoutes);
 app.use("/api/v1", courseAdminRoutes);
 app.use("/api/v1", syllabusAdminRoutes);
 app.use("/api/v1", topicAdminRoutes);
+app.use("/api/v1", uploadRoutes);
 
 app.use(errorMiddleware);

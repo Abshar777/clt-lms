@@ -4,7 +4,7 @@ export const createTopicSchema = z.object({
   syllabusId: z.string().min(1, "syllabusId is required"),
   courseId: z.string().min(1, "courseId is required"),
   title: z.string().min(2, "Title must be at least 2 characters"),
-  videoUrl: z.string().url("videoUrl must be a valid URL"),
+  videoUrl: z.string().min(1, "videoUrl is required"),
   overview: z.string().min(10, "Overview must be at least 10 characters"),
   order: z.number().int().min(0).optional().default(0),
 });
@@ -12,7 +12,7 @@ export const createTopicSchema = z.object({
 export const updateTopicSchema = z
   .object({
     title: z.string().min(2).optional(),
-    videoUrl: z.string().url().optional(),
+    videoUrl: z.string().min(1).optional(),
     overview: z.string().min(10).optional(),
     order: z.number().int().min(0).optional(),
   })

@@ -2,7 +2,8 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface ICourse extends Document {
   title: string;
-  photo: string;
+  photo?: string;
+  videoUrl?: string;
   description: string;
   rating: number;
   duration: string;
@@ -15,7 +16,8 @@ export interface ICourse extends Document {
 const courseSchema = new Schema<ICourse>(
   {
     title: { type: String, required: true, trim: true },
-    photo: { type: String, required: true },
+    photo: { type: String },
+    videoUrl: { type: String },
     description: { type: String, required: true },
     rating: { type: Number, default: 0, min: 0, max: 5 },
     duration: { type: String, required: true },

@@ -46,12 +46,15 @@ export class TopicAdminService {
     return { message: "Topic created successfully", topic: topicPublic(topic) };
   }
 
-  public async listTopics(syllabusId?: string, courseId?: string) {
+  public async listTopics(syllabusId?: string, courseId?: string, skip = 0, limit = 10) {
     const query: Record<string, string> = {};
     if (syllabusId) query.syllabusId = syllabusId;
     if (courseId) query.courseId = courseId;
-    const topics = await Topic.find(query).sort({ order: 1 });
-    return { topics: topics.map(topicPublic) };
+    const [topics, total] = await Promise.all([
+      Topic.find(query).sort({ order: 1 }).skip(skip).limit(limit),
+      Topic.countDocuments(query),
+    ]);
+    return { topics: topics.map(topicPublic), total };
   }
 
   public async getTopicById(topicId: string) {

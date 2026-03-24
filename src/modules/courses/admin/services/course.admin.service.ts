@@ -7,6 +7,7 @@ const coursePublic = (course: ICourse) => ({
   id: course.id,
   title: course.title,
   photo: course.photo,
+  videoUrl: course.videoUrl,
   description: course.description,
   rating: course.rating,
   duration: course.duration,
@@ -22,9 +23,12 @@ export class CourseAdminService {
     return { message: "Course created successfully", course: coursePublic(course) };
   }
 
-  public async listCourses() {
-    const courses = await Course.find().sort({ createdAt: -1 });
-    return { courses: courses.map(coursePublic) };
+  public async listCourses(skip = 0, limit = 10) {
+    const [courses, total] = await Promise.all([
+      Course.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Course.countDocuments(),
+    ]);
+    return { courses: courses.map(coursePublic), total };
   }
 
   public async getCourseById(courseId: string) {
@@ -39,6 +43,7 @@ export class CourseAdminService {
 
     if (input.title !== undefined) course.title = input.title;
     if (input.photo !== undefined) course.photo = input.photo;
+    if (input.videoUrl !== undefined) course.videoUrl = input.videoUrl;
     if (input.description !== undefined) course.description = input.description;
     if (input.rating !== undefined) course.rating = input.rating;
     if (input.duration !== undefined) course.duration = input.duration;

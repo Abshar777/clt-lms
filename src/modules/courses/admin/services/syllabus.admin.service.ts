@@ -10,6 +10,7 @@ const syllabusPublic = (s: ISyllabus) => ({
   courseId: s.courseId,
   title: s.title,
   moduleLabel: s.moduleLabel,
+  coverImage: s.coverImage ?? null,
   topics: s.topics,
   createdAt: s.createdAt,
   updatedAt: s.updatedAt,
@@ -29,6 +30,7 @@ export class SyllabusAdminService {
       courseId: input.courseId,
       title: input.title,
       moduleLabel: input.moduleLabel,
+      coverImage: input.coverImage ?? null,
       topics: topicEntries,
     });
 
@@ -39,10 +41,13 @@ export class SyllabusAdminService {
     return { message: "Syllabus created successfully", syllabus: syllabusPublic(syllabus) };
   }
 
-  public async listSyllabuses(courseId?: string) {
+  public async listSyllabuses(courseId?: string, skip = 0, limit = 10) {
     const query = courseId ? { courseId } : {};
-    const syllabuses = await Syllabus.find(query).sort({ createdAt: 1 });
-    return { syllabuses: syllabuses.map(syllabusPublic) };
+    const [syllabuses, total] = await Promise.all([
+      Syllabus.find(query).sort({ createdAt: 1 }).skip(skip).limit(limit),
+      Syllabus.countDocuments(query),
+    ]);
+    return { syllabuses: syllabuses.map(syllabusPublic), total };
   }
 
   public async getSyllabusById(syllabusId: string) {
@@ -57,6 +62,7 @@ export class SyllabusAdminService {
 
     if (input.title !== undefined) syllabus.title = input.title;
     if (input.moduleLabel !== undefined) syllabus.moduleLabel = input.moduleLabel;
+    if (input.coverImage !== undefined) syllabus.coverImage = input.coverImage;
     if (input.topics !== undefined) {
       syllabus.topics = input.topics.map((t) => ({
         topicId: new mongoose.Types.ObjectId(t.topicId),

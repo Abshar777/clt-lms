@@ -26,7 +26,9 @@ export class SyllabusAdminController {
   public listSyllabuses = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const courseId = req.query.courseId as string | undefined;
-      const result = await this.service.listSyllabuses(courseId);
+      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) || 10;
+      const result = await this.service.listSyllabuses(courseId, skip, limit);
       res.status(HTTP_STATUS.OK).json(result);
     } catch (error) {
       next(error);

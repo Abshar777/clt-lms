@@ -1,19 +1,26 @@
 import { z } from "zod";
 
-export const createCourseSchema = z.object({
-  title: z.string().min(2, "Title must be at least 2 characters"),
-  photo: z.string().url("Photo must be a valid URL"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  rating: z.number().min(0).max(5).optional(),
-  duration: z.string().min(1, "Duration is required"),
-  totalModules: z.number().int().min(0).optional(),
-  isPublished: z.boolean().optional(),
-});
+export const createCourseSchema = z
+  .object({
+    title: z.string().min(2, "Title must be at least 2 characters"),
+    photo: z.string().min(1).optional(),
+    videoUrl: z.string().url("Invalid video URL").optional(),
+    description: z.string().min(10, "Description must be at least 10 characters"),
+    rating: z.number().min(0).max(5).optional(),
+    duration: z.string().min(1, "Duration is required"),
+    totalModules: z.number().int().min(0).optional(),
+    isPublished: z.boolean().optional(),
+  })
+  .refine((data) => !!(data.photo?.length) || !!(data.videoUrl?.length), {
+    message: "At least one of photo or videoUrl is required",
+    path: ["photo"],
+  });
 
 export const updateCourseSchema = z
   .object({
     title: z.string().min(2).optional(),
-    photo: z.string().url().optional(),
+    photo: z.string().min(1).optional(),
+    videoUrl: z.string().url().optional(),
     description: z.string().min(10).optional(),
     rating: z.number().min(0).max(5).optional(),
     duration: z.string().min(1).optional(),

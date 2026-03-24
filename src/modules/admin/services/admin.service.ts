@@ -92,11 +92,12 @@ export class AdminService {
     };
   }
 
-  public async listAdmins() {
-    const admins = await Admin.find().sort({ createdAt: -1 });
-    return {
-      admins: admins.map((admin) => adminPublic(admin)),
-    };
+  public async listAdmins(skip = 0, limit = 10) {
+    const [admins, total] = await Promise.all([
+      Admin.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Admin.countDocuments(),
+    ]);
+    return { admins: admins.map((admin) => adminPublic(admin)), total };
   }
 
   public async getAdminById(adminId: string) {

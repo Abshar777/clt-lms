@@ -25,4 +25,9 @@ export const env = {
   otpExpMinutes: Number(process.env.OTP_EXP_MINUTES ?? 10),
   clientBaseUrl: process.env.CLIENT_BASE_URL ?? "http://localhost:5001",
   adminBaseUrl: process.env.ADMIN_BASE_URL ?? "http://localhost:5002",
+  r2AccountId: requireEnv("R2_ACCOUNT_ID"),
+  r2AccessKeyId: requireEnv("R2_ACCESS_KEY_ID"),
+  r2SecretAccessKey: requireEnv("R2_SECRET_ACCESS_KEY"),
+  r2BucketName: requireEnv("R2_BUCKET_NAME"),
+  r2PublicUrl: requireEnv("R2_PUBLIC_URL"),
 };

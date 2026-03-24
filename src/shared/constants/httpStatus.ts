@@ -12,6 +12,7 @@ export const HTTP_STATUS = {
 export const allowedOrigins = [
   process.env.FRONTEND_URL as string,
   process.env.ADMIN_URL as string,
+  "https://admin-funfin.vercel.app",
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:5001",

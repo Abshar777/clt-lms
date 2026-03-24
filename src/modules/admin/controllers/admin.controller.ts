@@ -59,9 +59,11 @@ export class AdminController {
     }
   };
 
-  public listAdmins = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public listAdmins = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await this.adminService.listAdmins();
+      const skip = Number(req.query.skip) || 0;
+      const limit = Number(req.query.limit) || 10;
+      const result = await this.adminService.listAdmins(skip, limit);
       res.status(HTTP_STATUS.OK).json(result);
     } catch (error) {
       next(error);
