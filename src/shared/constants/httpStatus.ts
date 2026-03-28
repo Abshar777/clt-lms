@@ -22,4 +22,5 @@ export const allowedOrigins = [
   "https://api-admin-fun-fin.clt-academy.com",
   "http://course1.clt-academy.com",
   "https://main.clt-academy.com",
+  "http://localhost:8080",
 ];
