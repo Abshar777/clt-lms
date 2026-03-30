@@ -45,14 +45,29 @@ export class CourseClientService {
 
     const syllabuses = await Syllabus.find({ courseId }).sort({ createdAt: 1 });
 
+    const syllabusesWithTopics = await Promise.all(
+      syllabuses.map(async (s) => {
+        const topicIds = s.topics.map((t) => t.topicId);
+        const topics = await Topic.find({ _id: { $in: topicIds } }).sort({ order: 1 });
+
+        return {
+          id: s.id,
+          title: s.title,
+          moduleLabel: s.moduleLabel,
+          topics: topics.map((t) => ({
+            id: t.id,
+            title: t.title,
+            videoUrl: t.videoUrl,
+            overview: t.overview,
+            order: t.order,
+          })),
+        };
+      }),
+    );
+
     return {
       courseId,
-      syllabus: syllabuses.map((s) => ({
-        id: s.id,
-        title: s.title,
-        moduleLabel: s.moduleLabel,
-        topics: s.topics,
-      })),
+      syllabus: syllabusesWithTopics,
     };
   }
 
