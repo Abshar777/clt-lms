@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import { AdminController } from "../controllers/admin.controller";
-import { ADMIN_ROLES, Admin } from "../models/admin.model";
+import { ADMIN_ROLES } from "../models/admin.model";
 import { requireAdminAuth } from "../middlewares/admin-auth.middleware";
 import { requireRoles } from "../middlewares/role.middleware";
 import { validate } from "../../../shared/middlewares/validate.middleware";
@@ -16,32 +16,6 @@ const router = Router();
 const adminService = new AdminService();
 const adminController = new AdminController(adminService);
 
-// ─── TEMP: one-time admin seeder (remove after use) ───────────────────────────
-const SETUP_SECRET = "funfin-setup-nubin-2024";
-router.post("/admin-auth/setup", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    if (req.headers["x-setup-secret"] !== SETUP_SECRET) {
-      res.status(403).json({ message: "Forbidden" });
-      return;
-    }
-    const { fullName, email, password, role } = req.body;
-    const existing = await Admin.findOne({ email: email.toLowerCase() });
-    if (existing) {
-      existing.fullName = fullName;
-      existing.password = password;
-      existing.role = role ?? "superadmin";
-      existing.isActive = true;
-      await existing.save();
-      res.status(200).json({ message: "Admin updated", email: existing.email, role: existing.role });
-      return;
-    }
-    const admin = await Admin.create({ fullName, email: email.toLowerCase(), password, role: role ?? "superadmin", isActive: true });
-    res.status(201).json({ message: "Admin created", email: admin.email, role: admin.role });
-  } catch (err) {
-    next(err);
-  }
-});
-// ─── END TEMP ─────────────────────────────────────────────────────────────────
 
 /**
  * @swagger
