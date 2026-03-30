@@ -1,20 +1,30 @@
 import mongoose from "mongoose";
 import { Syllabus, ISyllabus } from "../../models/syllabus.model";
 import { Course } from "../../models/course.model";
+import { Topic } from "../../models/topic.model";
 import { AppError } from "../../../../shared/utils/appError";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { CreateSyllabusInput, UpdateSyllabusInput } from "../types/syllabus.types";
 
-const syllabusPublic = (s: ISyllabus) => ({
-  id: s.id,
-  courseId: s.courseId,
-  title: s.title,
-  moduleLabel: s.moduleLabel,
-  coverImage: s.coverImage ?? null,
-  topics: s.topics,
-  createdAt: s.createdAt,
-  updatedAt: s.updatedAt,
-});
+const syllabusPublic = async (s: ISyllabus) => {
+  const topicIds = s.topics.map((t) => t.topicId);
+  const topics = await Topic.find({ _id: { $in: topicIds } }).select("_id title").lean();
+  const topicMap = new Map(topics.map((t) => [t._id.toString(), t.title]));
+
+  return {
+    id: s.id,
+    courseId: s.courseId,
+    title: s.title,
+    moduleLabel: s.moduleLabel,
+    coverImage: s.coverImage ?? null,
+    topics: s.topics.map((t) => ({
+      id: t.topicId.toString(),
+      title: topicMap.get(t.topicId.toString()) ?? "",
+    })),
+    createdAt: s.createdAt,
+    updatedAt: s.updatedAt,
+  };
+};
 
 export class SyllabusAdminService {
   public async createSyllabus(input: CreateSyllabusInput) {
@@ -38,7 +48,7 @@ export class SyllabusAdminService {
     const count = await Syllabus.countDocuments({ courseId: input.courseId });
     await Course.findByIdAndUpdate(input.courseId, { totalModules: count });
 
-    return { message: "Syllabus created successfully", syllabus: syllabusPublic(syllabus) };
+    return { message: "Syllabus created successfully", syllabus: await syllabusPublic(syllabus) };
   }
 
   public async listSyllabuses(courseId?: string, skip = 0, limit = 10) {
@@ -47,13 +57,13 @@ export class SyllabusAdminService {
       Syllabus.find(query).sort({ createdAt: 1 }).skip(skip).limit(limit),
       Syllabus.countDocuments(query),
     ]);
-    return { syllabuses: syllabuses.map(syllabusPublic), total };
+    return { syllabuses: await Promise.all(syllabuses.map(syllabusPublic)), total };
   }
 
   public async getSyllabusById(syllabusId: string) {
     const syllabus = await Syllabus.findById(syllabusId);
     if (!syllabus) throw new AppError("Syllabus not found", HTTP_STATUS.NOT_FOUND);
-    return { syllabus: syllabusPublic(syllabus) };
+    return { syllabus: await syllabusPublic(syllabus) };
   }
 
   public async updateSyllabus(syllabusId: string, input: UpdateSyllabusInput) {
@@ -71,7 +81,7 @@ export class SyllabusAdminService {
     }
 
     await syllabus.save();
-    return { message: "Syllabus updated successfully", syllabus: syllabusPublic(syllabus) };
+    return { message: "Syllabus updated successfully", syllabus: await syllabusPublic(syllabus) };
   }
 
   public async deleteSyllabus(syllabusId: string) {
