@@ -23,4 +23,5 @@ export const allowedOrigins = [
   "http://course1.clt-academy.com",
   "https://main.clt-academy.com",
   "http://localhost:8080",
+  "https://fun-fin-theta.vercel.app"
 ];
