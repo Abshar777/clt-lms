@@ -61,4 +61,7 @@ router.post("/uploads/image", requireAdminAuth, uploadImage, uploadController.up
  */
 router.post("/uploads/video", requireAdminAuth, uploadVideo, uploadController.uploadVideo);
 
+// Pre-signed URL for direct browser → R2 upload (bypasses nginx body-size limit)
+router.get("/uploads/video-presign", requireAdminAuth, uploadController.getVideoPresignedUrl);
+
 export default router;
