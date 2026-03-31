@@ -27,6 +27,7 @@ export class CourseClientService {
         id: c.id,
         title: c.title,
         photo: c.photo,
+        description: c.description,
         totalModules: c.totalModules,
         duration: c.duration,
         rating: c.rating,

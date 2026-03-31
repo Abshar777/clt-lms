@@ -10,3 +10,4 @@ package-lock.json
 backend
 
 ./src/scripts/logs.txt
+.vercel
